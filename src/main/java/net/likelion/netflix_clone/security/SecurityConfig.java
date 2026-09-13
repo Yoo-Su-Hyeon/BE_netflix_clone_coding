@@ -50,8 +50,25 @@ public class SecurityConfig {
                                 "/v3/api-docs/**"
                         ).permitAll()
 
-                        .requestMatchers("/api/admin/**")
-                        .hasRole("ADMIN")
+                        .requestMatchers(
+                                org.springframework.http.HttpMethod.POST,
+                                "/api/contents/**"
+                        ).hasRole("ADMIN")
+
+                        .requestMatchers(
+                                org.springframework.http.HttpMethod.PUT,
+                                "/api/contents/**"
+                        ).hasRole("ADMIN")
+
+                        .requestMatchers(
+                                org.springframework.http.HttpMethod.DELETE,
+                                "/api/contents/**"
+                        ).hasRole("ADMIN")
+
+                        .requestMatchers(
+                                org.springframework.http.HttpMethod.GET,
+                                "/api/contents/**"
+                        ).hasAnyRole("USER", "ADMIN")
 
                         .anyRequest()
                         .authenticated()
