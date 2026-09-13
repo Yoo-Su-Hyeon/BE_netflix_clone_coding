@@ -11,3 +11,7 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
+
+jwt:
+  secret: netflixCloneProjectJwtSecretKey2026NetflixCloneProject
+  expiration: 3600000
