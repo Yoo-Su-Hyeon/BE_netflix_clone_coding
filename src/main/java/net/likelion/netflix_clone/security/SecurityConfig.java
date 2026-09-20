@@ -2,6 +2,7 @@ package net.likelion.netflix_clone.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -42,6 +43,7 @@ public class SecurityConfig {
 
                 .authorizeHttpRequests(auth -> auth
 
+                        // 회원가입 / 로그인 / Swagger
                         .requestMatchers(
                                 "/api/users/signup",
                                 "/api/users/login",
@@ -50,26 +52,55 @@ public class SecurityConfig {
                                 "/v3/api-docs/**"
                         ).permitAll()
 
+                        // 콘텐츠 등록 - ADMIN
                         .requestMatchers(
-                                org.springframework.http.HttpMethod.POST,
+                                HttpMethod.POST,
                                 "/api/contents/**"
                         ).hasRole("ADMIN")
 
+                        // 콘텐츠 수정 - ADMIN
                         .requestMatchers(
-                                org.springframework.http.HttpMethod.PUT,
+                                HttpMethod.PUT,
                                 "/api/contents/**"
                         ).hasRole("ADMIN")
 
+                        // 콘텐츠 삭제 - ADMIN
                         .requestMatchers(
-                                org.springframework.http.HttpMethod.DELETE,
+                                HttpMethod.DELETE,
                                 "/api/contents/**"
                         ).hasRole("ADMIN")
 
+                        // 콘텐츠 조회 - USER, ADMIN
                         .requestMatchers(
-                                org.springframework.http.HttpMethod.GET,
+                                HttpMethod.GET,
                                 "/api/contents/**"
                         ).hasAnyRole("USER", "ADMIN")
 
+                        // 장르 등록 - ADMIN
+                        .requestMatchers(
+                                HttpMethod.POST,
+                                "/api/genres/**"
+                        ).hasRole("ADMIN")
+
+                        // 장르 수정 - ADMIN
+                        .requestMatchers(
+                                HttpMethod.PUT,
+                                "/api/genres/**"
+                        ).hasRole("ADMIN")
+
+                        // 장르 삭제 - ADMIN
+                        .requestMatchers(
+                                HttpMethod.DELETE,
+                                "/api/genres/**"
+                        ).hasRole("ADMIN")
+
+                        // 장르 조회 - USER, ADMIN
+                        .requestMatchers(
+                                HttpMethod.GET,
+                                "/api/genres/**"
+                        ).hasAnyRole("USER", "ADMIN")
+
+                        // 나머지는 로그인 필요
                         .anyRequest()
                         .authenticated()
                 )

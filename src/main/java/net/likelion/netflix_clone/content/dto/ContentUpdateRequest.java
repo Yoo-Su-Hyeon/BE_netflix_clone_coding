@@ -1,5 +1,7 @@
 package net.likelion.netflix_clone.content.dto;
 
+import java.util.Set;
+
 public class ContentUpdateRequest {
 
     private String title;
@@ -7,6 +9,7 @@ public class ContentUpdateRequest {
     private String thumbnailUrl;
     private String videoUrl;
     private Integer releaseYear;
+    private Set<Long> genreIds;
 
     public String getTitle() {
         return title;
@@ -26,5 +29,9 @@ public class ContentUpdateRequest {
 
     public Integer getReleaseYear() {
         return releaseYear;
+    }
+
+    public Set<Long> getGenreIds() {
+        return genreIds;
     }
 }
