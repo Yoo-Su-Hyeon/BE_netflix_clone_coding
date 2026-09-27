@@ -43,14 +43,22 @@ public class SecurityConfig {
 
                 .authorizeHttpRequests(auth -> auth
 
-                        // 회원가입 / 로그인 / Swagger
+                        // 회원가입 / 로그인 / Swagger / 업로드 이미지 조회
                         .requestMatchers(
                                 "/api/users/signup",
                                 "/api/users/login",
                                 "/swagger-ui/**",
                                 "/swagger-ui.html",
-                                "/v3/api-docs/**"
+                                "/v3/api-docs/**",
+                                "/uploads/**",
+                                "/error"
                         ).permitAll()
+
+                        // 콘텐츠 썸네일 이미지 업로드 - ADMIN
+                        .requestMatchers(
+                                HttpMethod.POST,
+                                "/api/contents/*/thumbnail"
+                        ).hasRole("ADMIN")
 
                         // 콘텐츠 등록 - ADMIN
                         .requestMatchers(

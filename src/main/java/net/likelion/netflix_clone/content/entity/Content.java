@@ -101,4 +101,8 @@ public class Content {
         this.videoUrl = videoUrl;
         this.releaseYear = releaseYear;
     }
+
+    public void updateThumbnailUrl(String thumbnailUrl) {
+        this.thumbnailUrl = thumbnailUrl;
+    }
 }

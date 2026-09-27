@@ -6,7 +6,10 @@ import net.likelion.netflix_clone.content.dto.ContentResponse;
 import net.likelion.netflix_clone.content.dto.ContentUpdateRequest;
 import net.likelion.netflix_clone.content.service.ContentService;
 import org.springframework.data.domain.Page;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/api/contents")
@@ -84,5 +87,24 @@ public class ContentController {
         contentService.delete(id);
 
         return "콘텐츠 삭제 성공";
+    }
+
+    @Operation(summary = "콘텐츠 썸네일 이미지 업로드")
+    @PostMapping(
+            value = "/{contentId}/thumbnail",
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE
+    )
+    public ResponseEntity<String> uploadThumbnail(
+            @PathVariable Long contentId,
+            @RequestPart("file") MultipartFile file
+    ) {
+
+        String imageUrl =
+                contentService.uploadThumbnail(
+                        contentId,
+                        file
+                );
+
+        return ResponseEntity.ok(imageUrl);
     }
 }

@@ -7,12 +7,14 @@ import net.likelion.netflix_clone.content.entity.Content;
 import net.likelion.netflix_clone.content.repository.ContentRepository;
 import net.likelion.netflix_clone.genre.entity.Genre;
 import net.likelion.netflix_clone.genre.repository.GenreRepository;
+import net.likelion.netflix_clone.image.service.ImageService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -21,13 +23,17 @@ public class ContentService {
 
     private final ContentRepository contentRepository;
     private final GenreRepository genreRepository;
+    private final ImageService imageService;
+
 
     public ContentService(
             ContentRepository contentRepository,
-            GenreRepository genreRepository
+            GenreRepository genreRepository,
+            ImageService imageService
     ) {
         this.contentRepository = contentRepository;
         this.genreRepository = genreRepository;
+        this.imageService = imageService;
     }
 
     // CREATE
@@ -187,5 +193,25 @@ public class ContentService {
                 );
 
         contentRepository.delete(content);
+    }
+
+    @Transactional
+    public String uploadThumbnail(
+            Long contentId,
+            MultipartFile file
+    ) {
+
+        Content content = contentRepository.findById(contentId)
+                .orElseThrow(() ->
+                        new IllegalArgumentException(
+                                "콘텐츠를 찾을 수 없습니다."
+                        )
+                );
+
+        String imageUrl = imageService.saveImage(file);
+
+        content.updateThumbnailUrl(imageUrl);
+
+        return imageUrl;
     }
 }
